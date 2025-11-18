@@ -1,0 +1,4 @@
+pdfminer.six>=20221105
+camelot-py[cv]>=0.10.1
+opencv-python>=4.5.0
+
