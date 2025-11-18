@@ -48,6 +48,7 @@ openssl rand -base64 32
 
 - [ ] Railway account created
 - [ ] New project created from GitHub repo
+- [ ] PostgreSQL database added
 - [ ] Environment variables configured
 - [ ] Auto-deployments enabled (optional but recommended)
 
@@ -66,21 +67,28 @@ openssl rand -base64 32
    - Select your repository
    - Railway will auto-detect configuration and start building
 
-3. **Set Environment Variables**
+3. **Add PostgreSQL Database**
+   - Click "New" → "Database" → "Add PostgreSQL"
+   - Wait for provisioning
+   - `DATABASE_URL` is automatically set
+
+4. **Set Environment Variables**
    - In Railway dashboard, go to Variables tab
    - Add the environment variables listed above
    - Save changes (Railway will auto-redeploy)
 
-4. **Monitor Deployment**
+5. **Monitor Deployment**
    - Watch the build logs in Railway dashboard
+   - Verify PostgreSQL is connected
    - Verify no build errors
    - Wait for deployment to complete
 
-5. **Test Your App**
+6. **Test Your App**
    - Click "Open App" in Railway dashboard
    - Test user registration and login
    - Upload a test PDF
    - Verify data displays correctly
+   - Check data persists after app restart
 
 ## Post-Deployment Checklist
 
@@ -134,8 +142,9 @@ curl $RAILWAY_URL/api/health
 
 ### Data Not Persisting
 
-- **Expected**: SQLite database is ephemeral on Railway
-- **Solution**: See RAILWAY_DEPLOYMENT.md for persistence options
+- **Solution**: Add PostgreSQL database in Railway
+- **Check**: Verify `DATABASE_URL` is set
+- **Verify**: Check logs show "Using PostgreSQL database"
 
 ## Estimated Deployment Time
 

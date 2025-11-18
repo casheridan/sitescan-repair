@@ -23,10 +23,21 @@ async function parsePDFWithPython(dataBuffer, tempFilePath, options = {}) {
       const pythonScript = path.join(__dirname, useCamelot ? 'pdfParserCamelot.py' : 'pdfParser.py');
       
       // Use venv Python if available, otherwise fall back to system Python
-      const venvPython = path.join(__dirname, 'venv', 'Scripts', 'python.exe');
-      const pythonCommand = require('fs').existsSync(venvPython) 
-        ? venvPython 
-        : (process.platform === 'win32' ? 'python' : 'python3');
+      // Check for Railway venv first, then local Windows venv, then system Python
+      const railwayVenvPython = '/opt/venv/bin/python3';
+      const windowsVenvPython = path.join(__dirname, 'venv', 'Scripts', 'python.exe');
+      const unixVenvPython = path.join(__dirname, 'venv', 'bin', 'python3');
+      
+      let pythonCommand;
+      if (require('fs').existsSync(railwayVenvPython)) {
+        pythonCommand = railwayVenvPython;
+      } else if (require('fs').existsSync(windowsVenvPython)) {
+        pythonCommand = windowsVenvPython;
+      } else if (require('fs').existsSync(unixVenvPython)) {
+        pythonCommand = unixVenvPython;
+      } else {
+        pythonCommand = process.platform === 'win32' ? 'python' : 'python3';
+      }
       
       // Add page range parameter for Camelot
       const args = useCamelot 

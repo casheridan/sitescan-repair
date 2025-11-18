@@ -20,15 +20,23 @@ git push origin main
 3. Select your repository
 4. Railway will automatically start building
 
-### Step 3: Set Environment Variables
+### Step 3: Add PostgreSQL Database
+
+In Railway dashboard:
+1. Click **"New"** → **"Database"** → **"Add PostgreSQL"**
+2. Railway automatically sets the `DATABASE_URL` environment variable
+3. Your app will detect and use PostgreSQL automatically! 
+
+### Step 4: Set Environment Variables
 
 In Railway dashboard, go to **Variables** tab and add:
 
 ```
 NODE_ENV=production
-PORT=3001
 SESSION_SECRET=<your-secure-random-string-here>
 ```
+
+**Note:** `DATABASE_URL` is automatically set when you add PostgreSQL!
 
 **Generate a secure SESSION_SECRET:**
 
@@ -42,17 +50,18 @@ Mac/Linux:
 openssl rand -base64 32
 ```
 
-### Step 4: Wait for Deployment
+### Step 5: Wait for Deployment
 
 Railway will:
 1. ✅ Install Node.js and Python dependencies
 2. ✅ Build the React frontend
-3. ✅ Start the backend server
-4. ✅ Serve the application
+3. ✅ Initialize PostgreSQL database
+4. ✅ Start the backend server
+5. ✅ Serve the application
 
 This takes about 5-10 minutes on first deploy.
 
-### Step 5: Test Your App
+### Step 6: Test Your App
 
 Click **"Open App"** in Railway dashboard and test:
 - ✅ User registration
@@ -69,6 +78,7 @@ Your app is already configured with:
 - **`railway.json`** - Railway deployment configuration
 - **`nixpacks.toml`** - Python 3.11 + dependencies setup
 - **`backend/server.js`** - Production environment handling
+- **`backend/database.js`** - Auto-detects PostgreSQL or SQLite
 - **`.railwayignore`** - Optimized deployment size
 
 ## 📋 Files Created for Deployment
@@ -94,10 +104,10 @@ This checks if all configuration files are in place.
 
 ## ⚠️ Important Notes
 
-### Database (SQLite)
-- **Ephemeral storage**: Data will be lost on redeploy
-- **For production**: Consider Railway PostgreSQL or persistent volumes
-- See full guide for migration instructions
+### Database (PostgreSQL)
+- **Persistent storage**: Add PostgreSQL in Railway for data persistence
+- **Automatic detection**: App uses PostgreSQL if `DATABASE_URL` is set
+- **Local development**: Uses SQLite automatically (no setup needed)
 
 ### File Uploads
 - PDF files are processed then deleted (current behavior)

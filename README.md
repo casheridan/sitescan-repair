@@ -282,7 +282,9 @@ A: PDFs are deleted after parsing. Only extracted data is kept in memory.
 ## 🎓 Tech Stack
 
 - **Backend**: Node.js, Express, pdf-parse, xlsx, multer
-- **Frontend**: React, Recharts, Axios, Lucide React
+- **Database**: PostgreSQL (production) / SQLite (development)
+- **Frontend**: React, Recharts, Axios, Lucide React, React-Leaflet
+- **Python**: Camelot, pdfminer.six, OpenCV (PDF parsing)
 - **Styling**: Custom CSS with responsive design
 
 ## 🌟 Future Enhancements

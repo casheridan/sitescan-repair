@@ -7,7 +7,7 @@ const fs = require('fs').promises;
 const XLSX = require('xlsx');
 const { calculateStatistics } = require('./pdfParser');
 const { parsePDFWithPython } = require('./pdfParserPython');
-const { projectOperations, dataOperations } = require('./database');
+const { db, dbType, projectOperations, dataOperations } = require('./database');
 const { router: authRouter, requireAuth } = require('./auth');
 
 const app = express();
@@ -15,6 +15,7 @@ const PORT = process.env.PORT || 3001;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'your-secret-key-change-in-production';
+const DATABASE_URL = process.env.DATABASE_URL;
 
 // Middleware
 app.use(cors({
@@ -33,8 +34,8 @@ if (NODE_ENV === 'production') {
 
 app.use(express.static('public'));
 
-// Session middleware
-app.use(session({
+// Session middleware with PostgreSQL store for production
+let sessionConfig = {
   secret: SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
@@ -44,7 +45,22 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     sameSite: NODE_ENV === 'production' ? 'none' : 'lax'
   }
-}));
+};
+
+// Use PostgreSQL session store in production
+if (DATABASE_URL) {
+  const pgSession = require('connect-pg-simple')(session);
+  sessionConfig.store = new pgSession({
+    pool: db, // Use the same pool from database.js
+    tableName: 'session',
+    createTableIfMissing: false // We create it in database.js
+  });
+  console.log('✓ Using PostgreSQL session store');
+} else {
+  console.log('✓ Using in-memory session store (development)');
+}
+
+app.use(session(sessionConfig));
 
 // Auth routes
 app.use('/api/auth', authRouter);
@@ -564,6 +580,7 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`🚰 Sewer Inspection API running on http://localhost:${PORT}`);
   console.log(`📊 Environment: ${NODE_ENV}`);
+  console.log(`💾 Database: ${dbType}`);
   console.log(`📊 Upload PDFs to: http://localhost:${PORT}/api/upload`);
   if (NODE_ENV === 'production') {
     console.log(`🌐 Frontend served from: ${path.join(__dirname, '../frontend/build')}`);
