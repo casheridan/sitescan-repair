@@ -1,10 +1,10 @@
 # Railway ignore file - files to exclude from deployment
 
-# Development files
-*.md
-!RAILWAY_DEPLOYMENT.md
+# Git files
 .git
 .gitignore
+
+# Environment files
 .env.local
 .env.development
 
@@ -15,28 +15,13 @@
 *.swo
 *~
 
-# Test files
-*.test.js
-*.spec.js
-__tests__
-
-# Documentation (except deployment guide)
-DEBUG_GUIDE.md
-PYTHON_SETUP.md
-QUICKSTART.md
-CAMELOT_SETUP.md
-GIS_INTEGRATION_GUIDE.md
-
-# Frontend source (we only need the build)
-# Keep source for now as we build on Railway
-
 # Local database (use production DB)
 backend/*.db
 backend/sewer_inspection.db
 
-# Uploads directory contents (not the directory itself)
-backend/uploads/*
-!backend/uploads/.gitkeep
+# Uploads directory contents
+backend/uploads/*.pdf
+backend/uploads/*.txt
 
 # Test and analysis scripts
 backend/analyze-missing.js
@@ -53,4 +38,10 @@ backend/test-improved.js
 # OS files
 .DS_Store
 Thumbs.db
+
+# Keep these important files:
+# - All source code (frontend/src/*, backend/*.js, backend/*.py)
+# - All configuration (*.json, *.toml)
+# - All public assets (frontend/public/*)
+# - All documentation (*.md)
 

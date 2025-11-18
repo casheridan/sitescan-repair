@@ -233,9 +233,9 @@ coverage/
 # Nuxt.js
 .nuxt/
 
-# Gatsby
+# Gatsby (build output, not source files)
 .cache/
-public/
+# public/ - Commented out to preserve React's frontend/public/ source directory
 
 # ============================================
 # Railway & Deployment
