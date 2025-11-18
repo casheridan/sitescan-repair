@@ -35,7 +35,7 @@ cmds = [
 **After:**
 ```toml
 [phases.setup]
-nixPkgs = ['python311', 'python311Packages.pip', 'python311Packages.virtualenv', 'ghostscript', 'tk']
+nixPkgs = ['nodejs_20', 'python311', 'python311Packages.pip', 'python311Packages.virtualenv', 'ghostscript', 'tk']
 
 [phases.install]
 cmds = [
@@ -49,6 +49,12 @@ cmds = [
 [env]
 PATH = '/opt/venv/bin:$PATH'  # ✅ Add venv to PATH
 ```
+
+**Key changes:**
+- ✅ Added `nodejs_20` to ensure Node.js and npm are available
+- ✅ Added `python311Packages.virtualenv` for venv support
+- ✅ Created virtual environment for Python packages
+- ✅ Set PATH to include venv binaries
 
 #### 2. Updated `backend/pdfParserPython.js`
 
