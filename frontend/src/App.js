@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Upload, Database, FileText, BarChart3, Download, Search, AlertCircle, Map, LogOut, FolderOpen } from 'lucide-react';
+import { Upload, FileText, BarChart3, Download, Search, AlertCircle, Map, LogOut, FolderOpen } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import SectionProfileTable from './components/SectionProfileTable';
 import InspectionReportsTable from './components/InspectionReportsTable';

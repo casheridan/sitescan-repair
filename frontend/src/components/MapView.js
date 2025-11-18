@@ -82,6 +82,9 @@ const getMarkerIcon = (opri) => {
   });
 };
 
+// Hays, Kansas coordinates (default map center)
+const HAYS_CENTER = [38.8792, -99.3268];
+
 function MapView({ data, dataId }) {
   const [showHeatmap, setShowHeatmap] = useState(true);
   const [showMarkers, setShowMarkers] = useState(true);
@@ -90,9 +93,6 @@ function MapView({ data, dataId }) {
   const [isGeocoding, setIsGeocoding] = useState(false);
   const [geoStats, setGeoStats] = useState({ total: 0, geocoded: 0 });
   const [usingCache, setUsingCache] = useState(false);
-
-  // Hays, Kansas coordinates
-  const HAYS_CENTER = [38.8792, -99.3268];
 
   // Generate cache key for geocoded data
   const getCacheKey = useCallback((id) => {
