@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FolderOpen, Trash2, RefreshCw, FileText, Calendar, HardDrive } from 'lucide-react';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+// Use relative URL in production (served by backend), localhost in development
+const API_BASE = process.env.REACT_APP_API_URL || 
+  (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3001/api');
 
 function Projects({ onLoadProject }) {
   const [projects, setProjects] = useState([]);

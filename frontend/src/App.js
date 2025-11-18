@@ -14,7 +14,9 @@ import './App.css';
 // Configure axios to send cookies
 axios.defaults.withCredentials = true;
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+// Use relative URL in production (served by backend), localhost in development
+const API_BASE = process.env.REACT_APP_API_URL || 
+  (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3001/api');
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);

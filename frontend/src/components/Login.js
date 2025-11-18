@@ -3,7 +3,9 @@ import { LogIn, UserPlus } from 'lucide-react';
 import axios from 'axios';
 import logo from '../Logo files/Mark only/SiteScan mark noly_light blue.png';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+// Use relative URL in production (served by backend), localhost in development
+const API_BASE = process.env.REACT_APP_API_URL || 
+  (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3001/api');
 
 function Login({ onLoginSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
