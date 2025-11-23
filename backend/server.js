@@ -108,6 +108,24 @@ app.get('/api/health', (req, res) => {
 });
 
 /**
+ * Debug endpoint - check session configuration (remove in production later)
+ */
+app.get('/api/debug/session', (req, res) => {
+  res.json({
+    sessionSecretSet: !!SESSION_SECRET && SESSION_SECRET !== 'your-secret-key-change-in-production',
+    nodeEnv: NODE_ENV,
+    hasSession: !!req.session,
+    sessionId: req.session?.id || 'none',
+    cookieSettings: {
+      secure: req.session?.cookie?.secure,
+      sameSite: req.session?.cookie?.sameSite,
+      httpOnly: req.session?.cookie?.httpOnly,
+      maxAge: req.session?.cookie?.maxAge
+    }
+  });
+});
+
+/**
  * Get all projects for current user
  */
 app.get('/api/projects', requireAuth, async (req, res) => {
