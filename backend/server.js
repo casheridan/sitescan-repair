@@ -43,7 +43,8 @@ let sessionConfig = {
     secure: NODE_ENV === 'production', // Enable secure cookies in production
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: NODE_ENV === 'production' ? 'none' : 'lax'
+    sameSite: 'lax', // Use 'lax' since frontend and backend are on same domain
+    path: '/' // Ensure cookie is available for all paths
   }
 };
 
