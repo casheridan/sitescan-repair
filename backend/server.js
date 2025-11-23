@@ -18,9 +18,10 @@ const SESSION_SECRET = process.env.SESSION_SECRET || 'your-secret-key-change-in-
 const DATABASE_URL = process.env.DATABASE_URL;
 
 // Middleware
+// CORS not strictly needed when frontend is served by backend, but keep for API flexibility
 app.use(cors({
   origin: NODE_ENV === 'production' 
-    ? [FRONTEND_URL, process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : ''].filter(Boolean)
+    ? true // Allow same-origin in production (frontend served by backend)
     : 'http://localhost:3000',
   credentials: true
 }));
@@ -62,6 +63,20 @@ if (DATABASE_URL) {
 }
 
 app.use(session(sessionConfig));
+
+// Debug middleware - log session cookies in production
+if (NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    const originalSend = res.send;
+    res.send = function(data) {
+      if (req.session && req.session.userId) {
+        console.log(`[Session] User ${req.session.userId} - Session ID: ${req.session.id}`);
+      }
+      return originalSend.call(this, data);
+    };
+    next();
+  });
+}
 
 // Auth routes
 app.use('/api/auth', authRouter);
@@ -111,16 +126,30 @@ app.get('/api/health', (req, res) => {
  * Debug endpoint - check session configuration (remove in production later)
  */
 app.get('/api/debug/session', (req, res) => {
+  // Create a test session value
+  if (!req.session.testValue) {
+    req.session.testValue = 'test-' + Date.now();
+  }
+  
   res.json({
     sessionSecretSet: !!SESSION_SECRET && SESSION_SECRET !== 'your-secret-key-change-in-production',
     nodeEnv: NODE_ENV,
     hasSession: !!req.session,
     sessionId: req.session?.id || 'none',
+    testValue: req.session?.testValue,
     cookieSettings: {
       secure: req.session?.cookie?.secure,
       sameSite: req.session?.cookie?.sameSite,
       httpOnly: req.session?.cookie?.httpOnly,
-      maxAge: req.session?.cookie?.maxAge
+      maxAge: req.session?.cookie?.maxAge,
+      domain: req.session?.cookie?.domain || 'not set',
+      path: req.session?.cookie?.path
+    },
+    headers: {
+      host: req.get('host'),
+      origin: req.get('origin'),
+      'x-forwarded-proto': req.get('x-forwarded-proto'),
+      'x-forwarded-for': req.get('x-forwarded-for')
     }
   });
 });

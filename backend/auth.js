@@ -33,9 +33,17 @@ router.post('/register', async (req, res) => {
     req.session.userId = user.id;
     req.session.username = user.username;
     
-    res.json({ 
-      success: true, 
-      user: { id: user.id, username: user.username, email: user.email }
+    // Explicitly save session before sending response
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.status(500).json({ error: 'Failed to create session' });
+      }
+      
+      res.json({ 
+        success: true, 
+        user: { id: user.id, username: user.username, email: user.email }
+      });
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -60,9 +68,17 @@ router.post('/login', async (req, res) => {
     req.session.userId = user.id;
     req.session.username = user.username;
     
-    res.json({ 
-      success: true, 
-      user: { id: user.id, username: user.username, email: user.email }
+    // Explicitly save session before sending response
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.status(500).json({ error: 'Failed to create session' });
+      }
+      
+      res.json({ 
+        success: true, 
+        user: { id: user.id, username: user.username, email: user.email }
+      });
     });
   } catch (error) {
     console.error('Login error:', error);
