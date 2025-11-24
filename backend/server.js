@@ -17,6 +17,11 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'your-secret-key-change-in-production';
 const DATABASE_URL = process.env.DATABASE_URL;
 
+// Trust Railway proxy for secure cookies
+if (NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Middleware
 // CORS not strictly needed when frontend is served by backend, but keep for API flexibility
 app.use(cors({
@@ -38,8 +43,10 @@ app.use(express.static('public'));
 // Session middleware with PostgreSQL store for production
 let sessionConfig = {
   secret: SESSION_SECRET,
+  name: 'sessionId', // Explicit cookie name
   resave: false,
   saveUninitialized: false,
+  proxy: NODE_ENV === 'production', // Trust proxy in production
   cookie: {
     secure: NODE_ENV === 'production', // Enable secure cookies in production
     httpOnly: true,
