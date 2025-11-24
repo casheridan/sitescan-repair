@@ -1,5 +1,6 @@
 [phases.setup]
-nixPkgs = ['nodejs_20', 'python311', 'python311Packages.pip', 'python311Packages.virtualenv', 'ghostscript', 'tk']
+nixPkgs = ['nodejs_20', 'python311', 'python311Packages.pip', 'python311Packages.virtualenv', 'ghostscript', 'tk', 'gcc', 'glibc']
+nixLibs = ['stdenv.cc.cc.lib']
 
 [phases.install]
 cmds = [
